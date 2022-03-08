@@ -1,0 +1,44 @@
+.login {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    width: 100vw;
+    background-color: rgb(103, 167, 143);
+    background-size: 100vw 100vh;
+}
+
+.content {
+    width: 600px;
+    border-radius: 10px;
+    padding: 100px;
+    background-color: rgb(241, 233, 170);
+}
+
+.header {
+    color: rgb(142, 183, 60);
+    font-size: 30px;
+    text-align: center;
+    margin-bottom: 40px;
+    display: flex;
+    justify-content: center;
+}
+
+.login-username {
+    margin-bottom: 50px !important;
+}
+
+.footer {
+    margin-top: 40px;
+    color: rgb(142, 183, 60);
+    display: flex;
+    justify-content: right;
+}
+
+.register {
+    text-align: right;
+    color: rgb(142, 183, 60);
+    width: 32px;
+    font-size: 16px;
+    border-bottom: 5px;
+}

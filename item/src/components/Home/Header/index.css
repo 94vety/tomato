@@ -1,0 +1,21 @@
+.he-con {
+    background-color: rgb(59, 93, 79);
+    height: 60px;
+    padding: 20px 200px;
+    color: rgb(153, 197, 65);
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    line-height: 20px;
+    font-size: 20px;
+    font-weight: bolder;
+    font-family: 'Times New Roman', Times, serif !important;
+}
+
+.he-right {
+    display: flex;
+    flex-direction: row;
+    width: 300px;
+    justify-content: space-between;
+    cursor: default;
+}
