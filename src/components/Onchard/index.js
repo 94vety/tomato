@@ -2,7 +2,7 @@ import "./index.css";
 
 function Onchard() {
     return (
-        <div>果园</div>
+        <div></div>
     )
 }
 

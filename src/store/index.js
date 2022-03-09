@@ -4,7 +4,8 @@ import { message } from "antd";
 import {
     login,
     register,
-    getTomatos
+    getTomatos,
+    addReport
 } from "../services/index.js";
 
 class Mobx {
@@ -81,6 +82,20 @@ class Mobx {
             this.tomatoList = user_report;
         } else {
             message.error(errors);
+        }
+    }
+
+    addReportRequest = async(data) => {
+        const {
+            data: {
+                code, errors
+            }
+        } = await addReport(data);
+
+        if (code) {
+            message.success("任务记录已上传");
+        } else {
+            message.error(errors);       
         }
     }
 }

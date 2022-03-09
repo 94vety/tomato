@@ -1,23 +1,31 @@
 import { useState, useEffect } from "react";
 import {
-    Modal, Input,
+    Modal, Input, Button,
     InputNumber, Empty
 } from "antd";
 import { observer } from "mobx-react-lite";
 import myStore from "../../../store";
-import { PlusCircleOutlined } from '@ant-design/icons';
+import {
+    PlusCircleOutlined,
+    PauseCircleOutlined,
+} from '@ant-design/icons';
 import "./index.css";
 
+const { confirm } = Modal;
+let stop = false;
+
 function Card() {
+    const [count, setCount] = useState(0);
     const [status, setStatus] = useState(false);
     const [isVisible, setVisible] = useState(false);
     const [label, setLabel] = useState("");
     const [comment, setComment] = useState("");
     const [minute, setMinute] = useState(30);
     const [second, setSecond] = useState("00:00");
+    const [commentVisible, setCommentVisible] = useState(false);
 
     useEffect(() => {
-        myStore.getTomatosRequest()
+        myStore.getTomatosRequest();
     }, [])
 
     const handleCreate = () => {
@@ -26,25 +34,59 @@ function Card() {
 
     const handleOk = () => {
         setVisible(false);
-        setStatus(true)
+        setStatus(true);
         calcTime();
     }
 
     const handleCancel = () => {
         setVisible(false);
         setLabel("");
-        setComment("");
         setMinute(30);
     }
 
+    const handlePause = async() => {
+        confirm({
+            title: "番茄学习法",
+            content: "是否确认中止任务",
+            okText: "确认",
+            cancelText: "取消",
+            onOk() {
+                setCommentVisible(true);
+                stop = true;
+            },
+        });
+    }
+
+    const handleComment = () => {
+        setCommentVisible(false);
+    }
+
+    const handleComplie = () => {
+        myStore.addReportRequest({
+            expected_time: minute,
+            actual_time: parseInt((count + 1) / 60),
+            tip: label,
+            comment 
+        });
+
+        stop = false;
+        setCommentVisible(false);
+        setStatus(false);
+        myStore.getTomatosRequest();
+    }
+
     const calcTime = () => {
-        let seconds = 60 * 2;
+        let seconds = minute * 60;
 
         let timer = setInterval(() => {
             seconds--;
+            setCount(minute * 60 - seconds);
 
             if (seconds <= 0) {
                 setSecond("00:00");
+                setCommentVisible(true);
+                clearInterval(timer);
+            } else if (stop) {
                 clearInterval(timer);
             } else {
                 let m = parseInt((seconds / 60) % 60);
@@ -64,13 +106,33 @@ function Card() {
 
     return (
         <div className="ca-ma">
+            <Modal
+                title="心得体会"
+                visible={commentVisible}
+                onOk={handleComment}
+                okText="确认"
+                footer={[
+                    <Button key="btn" onClick={handleComplie}>
+                        确认
+                    </Button>
+                ]}
+            >
+                <Input
+                    value={comment}
+                    onChange={({target: { value }}) => setComment(value)}
+                    placeholder="写下自己的心得体会"
+                />
+            </Modal>
             <div className="card">
                 {status
                     ? (<div className="ca-task">
                         <div className="ca-la">{label}</div>
-                        <div className="ca-co">{comment}</div>
                         <div className="ca-title">倒计时</div>
                         <div className="ca-time">{second}</div>
+                        <PauseCircleOutlined
+                            className="ca-pause"
+                            onClick={handlePause}
+                        /> 
                     </div>)
                     :  (<div>
                         <div className="ca-header">番茄列表</div>
@@ -94,15 +156,6 @@ function Card() {
                                         placeholder="输入标签"
                                         value={label}
                                         onChange={({target: { value }}) => setLabel(value)}
-                                    />
-                                </div>
-                                <div className="ca-td">
-                                    <div className="ca-label">激励：</div>
-                                    <Input
-                                        className="ca-input"
-                                        placeholder="来句鼓励自己"
-                                        value={comment}
-                                        onChange={({target: { value }}) => setComment(value)}
                                     />
                                 </div>
                                 <div className="ca-td">
@@ -146,8 +199,6 @@ function Card() {
                         </div>
                     </div>)
                 }
-                
-               
             </div>
         </div>
     )
