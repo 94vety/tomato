@@ -6,7 +6,7 @@ export const register = data => request.post("/register/", data);
 
 export const getTomatos = () => request.get("/reports/");
 
-export const addReport = data => request.post("/addreport/", data);
+export const addReport = data => request.post("/add-report/", data);
 
 export const getGoodList = () => request.get("/goods/");
 

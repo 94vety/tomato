@@ -82,11 +82,10 @@ function Card() {
         let timer = setInterval(() => {
             seconds--;
             const count = minute * 60;
-            const percent = (parseInt((count - seconds) / count) * 100).toFixed(2);
+            const percents = parseInt(((count - seconds) / count) * 10000) / 100;
 
             setCount(count - seconds);
-
-            setPercent(percent);
+            setPercent(percents.toFixed(2));
 
             if (seconds <= 0) {
                 setSecond("00:00");
@@ -144,9 +143,11 @@ function Card() {
                                     '100%': '#87d068',
                                 }}
                                 percent={percent}
+                                format={() => ""}
                                 trailColor="rgb(241, 233, 170)"
                                 width={200}
                             />
+                            <div className="ca-process-word">{`${percent} %`}</div>
                         </div>
                         <PauseCircleOutlined
                             className="ca-pause"

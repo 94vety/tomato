@@ -49,6 +49,14 @@
     transform: translateX(-50%);
 }
 
+.ca-process-word {
+    color: rgb(59, 93, 79);
+    position: absolute;
+    top: 75px;
+    left: calc(50% - 50px);
+    font-size: 30px;
+}
+
 .ca-pause {
     position: absolute;
     top: 50px;
