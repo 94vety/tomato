@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import {
     Modal, Input, Button,
-    InputNumber, Empty
+    InputNumber, Empty, Progress
 } from "antd";
 import { observer } from "mobx-react-lite";
 import myStore from "../../../store";
@@ -22,6 +22,7 @@ function Card() {
     const [comment, setComment] = useState("");
     const [minute, setMinute] = useState(30);
     const [second, setSecond] = useState("00:00");
+    const [percent, setPercent] = useState(0);
     const [commentVisible, setCommentVisible] = useState(false);
 
     useEffect(() => {
@@ -80,7 +81,12 @@ function Card() {
 
         let timer = setInterval(() => {
             seconds--;
-            setCount(minute * 60 - seconds);
+            const count = minute * 60;
+            const percent = (parseInt((count - seconds) / count) * 100).toFixed(2);
+
+            setCount(count - seconds);
+
+            setPercent(percent);
 
             if (seconds <= 0) {
                 setSecond("00:00");
@@ -129,6 +135,19 @@ function Card() {
                         <div className="ca-la">{label}</div>
                         <div className="ca-title">倒计时</div>
                         <div className="ca-time">{second}</div>
+                        <div className="ca-process">
+                            <Progress
+                                className="ca-process-inner"
+                                type="circle"
+                                strokeColor={{
+                                    '0%': '#108ee9',
+                                    '100%': '#87d068',
+                                }}
+                                percent={percent}
+                                trailColor="rgb(241, 233, 170)"
+                                width={200}
+                            />
+                        </div>
                         <PauseCircleOutlined
                             className="ca-pause"
                             onClick={handlePause}

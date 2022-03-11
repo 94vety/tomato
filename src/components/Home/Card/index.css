@@ -27,15 +27,26 @@
 }
 
 .ca-title {
-    margin-top: 50px;
+    margin-top: 20px;
     font-size: 30px;
     text-align: center;
 }
 
 .ca-time {
-    margin-top: 50px;
     font-size: 80px;
     text-align: center;
+}
+
+.ca-process {
+    width: 100%;
+    position: relative;
+}
+
+.ca-process-inner {
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
 }
 
 .ca-pause {
