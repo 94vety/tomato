@@ -5,12 +5,29 @@ import {
     login,
     register,
     getTomatos,
-    addReport
+    addReport,
+    getGoodList,
+    buyGood,
+    adminSelfRoom,
+    placeSelfRoom,
+    joinRoom,
+    addCom,
+    modifyCom,
+    deleteCom,
+    modifyRoomName,
+    deleteUser,
+    deleteGroup,
+    quitGroup,
+    createGroup
 } from "../services/index.js";
 
 class Mobx {
     tomato = 0
     tomatoList = []
+    goodList = []
+    room = {}
+    member = []
+    listEmpty = true
 
     constructor() {
         makeAutoObservable(this);
@@ -96,6 +113,199 @@ class Mobx {
             message.success("任务记录已上传");
         } else {
             message.error(errors);       
+        }
+    }
+
+    getGoodListRequest = async() => {
+        const {
+            data: {
+                code, errors,
+                data
+            }
+        } = await getGoodList();
+
+        if (code) {
+            this.goodList = data;
+        } else {
+            message.error(errors);
+        }
+    }
+
+    buyGoodRequest = async(data) => {
+        const {
+            data: {
+                code, errors
+            }
+        } = await buyGood(data);
+        
+        if (code) {
+            message.success("购买成功");
+            this.goodList = this.goodList.map(item => {
+                if (item.id === data.goods) {
+                    return {
+                        ...item,
+                        number: item.number - 1
+                    }
+                } else {
+                    return item;
+                }
+            })
+        } else {
+            message.error(errors);
+        }
+    }
+
+    adminSelfRoomRequest = async() => {
+        const {
+            data: {
+                code, data, errors
+            }
+        } = await adminSelfRoom();
+
+        if (code) {
+            if (data[0].length === 0) {
+                this.listEmpty = true;
+            } else {
+                const { member } = data[0];
+                this.listEmpty = false;
+                this.room = data[0];
+                this.member = member;
+            }
+        } else {
+            message.error(errors);
+        }
+    }
+
+    placeSelfRoomRequest = async() => {
+        const {
+            data: {
+                code, data, errors
+            }
+        } = await placeSelfRoom();
+        
+        if (code) {
+            if (data[0].length === 0) {
+                this.listEmpty = true;
+            } else {
+                const { member } = data[0];
+                this.listEmpty = false;
+                this.room = data[0];
+                this.member = member;
+            }
+        } else {
+            message.error(errors);
+        }
+    }
+
+    joinRoomRequest = async(data) => {
+        const {
+            data: {
+                code, errors
+            }
+        } = await joinRoom(data);
+        
+        if (code) {
+            message.success("成功加入自习室");
+        } else {
+            message.error(errors);
+        }
+    }
+
+    addComRequest = async(data) => {
+        const {
+            data: {
+                code, msg, errors
+            }
+        } = await addCom(data);
+
+        if (code) {
+            message.success(msg);
+            this.getGoodListRequest();
+        } else {
+            message.error(errors);
+        }
+    }
+
+    modifyComRequest = async(data, id) => {
+        const {
+            data: {
+                code, msg, errors
+            }
+        } = await modifyCom(data, id);
+
+        if (code) {
+            message.success(msg);
+            this.getGoodListRequest();
+        } else {
+            message.error(errors);
+        }
+    }
+
+    deleteCom = async(id) => {
+        const {
+            data: {
+                code, errors, msg
+            }
+        } = await deleteCom(id);
+
+        if (code) {
+            message.success(msg);
+            this.getGoodListRequest();
+        } else {
+            message.error(errors);
+        }
+    }
+
+    modifyRoomNameRequest = async(data, id) => {
+        const {
+            data: {
+                code, msg, errors
+            }
+        } = await modifyRoomName(data, id);
+
+        if (code) {
+            message.success(msg);
+            myStore.adminSelfRoomRequest();
+        } else {
+            message.error(errors);
+        }
+    }
+
+    deleteUserRequest = async(data) => {
+        const {
+            data: {
+                code, msg, errors
+            }
+        } = await deleteUser(data);
+
+        if (code) {
+            message.success(msg);
+        } else {
+            message.error(errors);
+        }
+    }
+
+    deleteGroupRequest = async(id) => {
+        const event = await deleteGroup(id);
+        console.log(event);
+    }
+
+    quitGroupRequest = async(data) => {
+        const event = await quitGroup(data);
+        console.log(event);
+    }
+
+    createGroupRequest = async(data) => {
+        const {
+            data: {
+                code, msg, errors
+            }
+        } = await createGroup(data);
+
+        if (code) {
+            message.success(msg);
+        } else {
+            message.error(errors);
         }
     }
 }

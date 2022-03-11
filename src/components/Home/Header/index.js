@@ -1,6 +1,8 @@
 import { useNavigate } from "react-router-dom";
 import "./index.css";
 
+const admin = localStorage.getItem("admin");
+
 function Header() {
     const navigate = useNavigate();
 
@@ -12,10 +14,19 @@ function Header() {
         navigate("/selfstudent");
     }
 
+    const handleManage = () => {
+        navigate("/manage");
+    }
+
     return (
         <div className="he-con">
             <div className="he-icon">番茄</div>
             <div className="he-right">
+                {admin && <div
+                    className="he-manage"
+                    onClick={handleManage}
+                >管理中心</div>
+                }
                 <div
                     className="he-onchard"
                     onClick={handleOnchard}

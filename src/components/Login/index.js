@@ -32,7 +32,6 @@ function Login() {
     }
 
     const handleClickRegister = async(value) => {
-        console.log(value);
         const {
             password, password2
         } = value;

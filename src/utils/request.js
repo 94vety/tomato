@@ -120,5 +120,22 @@ export default {
                 return checkCode(res);
             }
         )
+    },
+    put(url, data) {
+        return axios({
+            method: 'put',
+            baseURL,
+            url,
+            data,
+            timeout: 1000
+        }).then(
+            (response) => {
+                return checkStatus(response)
+            }
+        ).then(
+            (res) => {
+                return checkCode(res);
+            }
+        )
     }
 }
