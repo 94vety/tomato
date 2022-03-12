@@ -28,6 +28,8 @@ class Mobx {
     room = {}
     member = []
     listEmpty = true
+    vip = false
+    admin = false
 
     constructor() {
         makeAutoObservable(this);
@@ -46,9 +48,10 @@ class Mobx {
 
         if (code) {
             this.tomato = tomato;
+            this.vip = vip;
+            this.admin = admin;
+
             localStorage.setItem("token", token);
-            localStorage.setItem("vip", vip);
-            localStorage.setItem("admin", admin);
             localStorage.setItem("username", data.username);
             localStorage.setItem("email", email);
             message.success("登录成功");
@@ -72,9 +75,10 @@ class Mobx {
 
         if (code) {
             this.tomato = tomato;
+            this.vip = vip;
+            this.admin = admin;
+            
             localStorage.setItem("token", token);
-            localStorage.setItem("vip", vip);
-            localStorage.setItem("admin", admin);
             localStorage.setItem("username", data.username);
             localStorage.setItem("email", email);
             message.success("注册成功自动登录");
@@ -163,7 +167,7 @@ class Mobx {
         } = await adminSelfRoom();
 
         if (code) {
-            if (data[0].length === 0) {
+            if (data.length === 0) {
                 this.listEmpty = true;
             } else {
                 const { member } = data[0];
@@ -184,7 +188,7 @@ class Mobx {
         } = await placeSelfRoom();
         
         if (code) {
-            if (data[0].length === 0) {
+            if (data.length === 0) {
                 this.listEmpty = true;
             } else {
                 const { member } = data[0];
@@ -280,19 +284,38 @@ class Mobx {
 
         if (code) {
             message.success(msg);
+            myStore.adminSelfRoomRequest();
         } else {
             message.error(errors);
         }
     }
 
     deleteGroupRequest = async(id) => {
-        const event = await deleteGroup(id);
-        console.log(event);
+        const {
+            data: {
+                code, errors, msg
+            }
+        } = await deleteGroup(id);
+
+        if (code) {
+            message.success(msg);
+        } else {
+            message.error(errors);
+        }
     }
 
     quitGroupRequest = async(data) => {
-        const event = await quitGroup(data);
-        console.log(event);
+        const {
+            data: {
+                code, errors, msg
+            }
+        } = await quitGroup(data);
+
+        if (code) {
+            message.success(msg);
+        } else {
+            message.error(errors);
+        }
     }
 
     createGroupRequest = async(data) => {

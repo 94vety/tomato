@@ -137,6 +137,7 @@
 }
 
 .self-room-list {
+    margin-top: 20px;
     margin-left: 100px;
 }
 
@@ -157,9 +158,17 @@
     flex-direction: row;
 }
 
+.apply-user {
+    font-size: 18px;
+    margin-left: 80px;
+    color: white;
+    margin-top: 3px;
+    width: 20px;
+}
+
 .delete-user {
     font-size: 18px;
-    margin-left: 40px;
+    margin-left: 80px;
     color: white;
     margin-top: 3px;
 }

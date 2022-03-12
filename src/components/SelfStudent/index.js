@@ -10,10 +10,10 @@ import "./index.css";
 import {
     LeftCircleOutlined, EditOutlined,
     DeleteOutlined, UsergroupDeleteOutlined,
-    LogoutOutlined
+    LogoutOutlined, PlusCircleOutlined
 } from '@ant-design/icons';
 
-const vip = localStorage.getItem("vip");
+const { confirm } = Modal;
 
 function SelfStudent() {
     const navigate = useNavigate();
@@ -24,7 +24,7 @@ function SelfStudent() {
     const [max, setMax] = useState(0);
 
     useEffect(() => {
-        if (vip) {
+        if (myStore.vip) {
             myStore.adminSelfRoomRequest();
         } else {
             myStore.placeSelfRoomRequest();
@@ -77,11 +77,29 @@ function SelfStudent() {
     }
 
     const handleDeleteGroup = (id) => {
-        console.log(id);
+        confirm({
+            title: "番茄自习室",
+            content: "是否删除自习室",
+            okText: "确认",
+            cancelText: "取消",
+            onOk() {
+                myStore.deleteGroupRequest(id);
+            }
+        })
     }
 
     const handleQuitGroup = (id) => {
-        console.log(id)
+        confirm({
+            title: "番茄自习室",
+            content: "是否确认退出自习室",
+            okText: "确认",
+            cancelText: "取消",
+            onOk() {
+                myStore.quitGroupRequest({
+                    goods: id
+                });
+            }
+        })
     }
 
     const handleCreateRoom = () => {
@@ -93,6 +111,10 @@ function SelfStudent() {
         } else {
             message.warn("人数小于 1");
         } 
+    }
+
+    const handleApplyUser = () => {
+        console.log("通过申请");
     }
 
     return (
@@ -140,7 +162,7 @@ function SelfStudent() {
                     </div>
                 </div>
             </div>
-            {vip
+            {myStore.vip
                 ? myStore.listEmpty
                     ? (<div className="self-room">
                         <div className="self-vip-title">创建房间</div>
@@ -168,12 +190,6 @@ function SelfStudent() {
                                     onClick={() => handleDeleteGroup(myStore.room.id)}
                                 />
                             </Popover>
-                            <Popover content="退出自习室">
-                                <LogoutOutlined
-                                    className="self-quit"
-                                    onClick={() => handleQuitGroup(myStore.room.id)}
-                                />
-                            </Popover>
                             <Popover content="编辑自习室">
                                 <EditOutlined
                                     className="self-name-edit"
@@ -185,7 +201,7 @@ function SelfStudent() {
                             </div>
                             <div className="self-room-max">最大人数: {myStore.room.max}</div>
                         </div>
-                        <div className="self-room-member">成员</div>
+                        <div className="self-bar"></div>
                         <div className="self-room-list">
                             {
                                 myStore.member.map(({ id, activate, user: { name, tomato, vip } }) => {
@@ -207,10 +223,26 @@ function SelfStudent() {
                                                 </div>
                                             )
                                         }
-                                        <DeleteOutlined
-                                            className="delete-user"
-                                            onClick={() => handleDeleteUser(id)}
-                                        />
+                                        {!activate
+                                            ? (
+                                                <Popover content="申请加入自习室">
+                                                    <PlusCircleOutlined
+                                                        className="apply-user"
+                                                        onClick={handleApplyUser}
+                                                    />
+                                                </Popover>
+                                            )
+                                            : (
+                                                <div className="apply-user"></div>
+                                            )
+
+                                        }
+                                        <Popover content="踢出自习室">
+                                            <DeleteOutlined
+                                                className="delete-user"
+                                                onClick={() => handleDeleteUser(id)}
+                                            />
+                                        </Popover>
                                     </div>
                                 })
                             }
@@ -220,12 +252,18 @@ function SelfStudent() {
                     ? (<div className="self-member-room">快加入自习室，学习吧！</div>)
                     : (<div className="self-room">
                         <div className="self-room-header">
+                            <Popover content="退出自习室">
+                                <LogoutOutlined
+                                    className="self-quit"
+                                    onClick={() => handleQuitGroup(myStore.room.id)}
+                                />
+                            </Popover>
                             <div className="self-room-name">
                                 房间名: {myStore.room.name}
                             </div>
                             <div className="self-room-max">最大人数: {myStore.room.max}</div>
                         </div>
-                        <div className="self-room-member">成员</div>
+                        <div className="self-bar"></div>
                         <div className="self-room-list">
                             {
                                 myStore.member.map(({ id, activate, user: { name, tomato, vip } }) => {
@@ -233,20 +271,6 @@ function SelfStudent() {
                                         <div className="self-member-tomato">{tomato}</div>
                                         <div className="self-member-name">{name}</div>
                                         <div className="self-member-vip">{vip ? "会员" : "非会员"}</div>
-                                        {!activate
-                                            ? (
-                                                <div className="self-badge">
-                                                    <Badge color="cyan" />
-                                                    <div className="self-badge-word">自习中</div>
-                                                </div>
-                                            )
-                                            : (
-                                                <div className="self-badge">
-                                                    <Badge color="volcano" />
-                                                    <div className="self-badge-word">申请</div>
-                                                </div>
-                                            )
-                                        }
                                     </div>
                                 })
                             }

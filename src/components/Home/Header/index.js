@@ -1,7 +1,7 @@
 import { useNavigate } from "react-router-dom";
+import { observer } from "mobx-react-lite";
+import myStore from "../../../store";
 import "./index.css";
-
-const admin = localStorage.getItem("admin");
 
 function Header() {
     const navigate = useNavigate();
@@ -22,7 +22,7 @@ function Header() {
         <div className="he-con">
             <div className="he-icon">番茄</div>
             <div className="he-right">
-                {admin && <div
+                {myStore.admin && <div
                     className="he-manage"
                     onClick={handleManage}
                 >管理中心</div>
@@ -40,4 +40,4 @@ function Header() {
     )
 }
 
-export default Header;
+export default observer(Header);

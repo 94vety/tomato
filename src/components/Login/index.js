@@ -118,7 +118,21 @@ function Login() {
                         autoComplete="off"
                     >
                         <FormItem
-                            label="用户名"
+                            label="昵称"
+                            name="name"
+                            rules={
+                                [
+                                    {
+                                        required: true,
+                                        message: 'Please input your username!'
+                                    }
+                                ]
+                            }
+                        >
+                            <Input />
+                        </FormItem>
+                        <FormItem
+                            label="账号"
                             name="username"
                             rules={
                                 [
