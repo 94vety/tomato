@@ -12,6 +12,7 @@ import {
     DeleteOutlined, UsergroupDeleteOutlined,
     LogoutOutlined, PlusCircleOutlined
 } from '@ant-design/icons';
+import imgUrl from "../../images/tomato.png";
 
 const { confirm } = Modal;
 
@@ -71,8 +72,16 @@ function SelfStudent() {
     }
 
     const handleDeleteUser = (id) => {
-        myStore.deleteUserRequest({
-            info: id
+        confirm({
+            title: "番茄自习室",
+            content: "是否提出该同学",
+            okText: "确认",
+            cancelText: "取消",
+            onOk() {
+                myStore.deleteUserRequest({
+                    info: id
+                });
+            }
         });
     }
 
@@ -113,8 +122,18 @@ function SelfStudent() {
         } 
     }
 
-    const handleApplyUser = () => {
-        console.log("通过申请");
+    const handleApplyUser = (id) => {
+        confirm({
+            title: "番茄自习室",
+            content: "是否通过该申请",
+            okText: "确认",
+            cancelText: "取消",
+            onOk() {
+                myStore.quitGroupRequest({
+                    info: id
+                });
+            }
+        })
     }
 
     return (
@@ -206,7 +225,10 @@ function SelfStudent() {
                             {
                                 myStore.member.map(({ id, activate, user: { name, tomato, vip } }) => {
                                     return <div className="self-member" key={id}>
-                                        <div className="self-member-tomato">{tomato}</div>
+                                        <div className="self-member-tomato">
+                                            <img className="self-member-img" src={imgUrl} />
+                                            {tomato}
+                                        </div>
                                         <div className="self-member-name">{name}</div>
                                         <div className="self-member-vip">{vip ? "会员" : "非会员"}</div>
                                         {!activate
@@ -228,7 +250,7 @@ function SelfStudent() {
                                                 <Popover content="申请加入自习室">
                                                     <PlusCircleOutlined
                                                         className="apply-user"
-                                                        onClick={handleApplyUser}
+                                                        onClick={() => handleApplyUser(id)}
                                                     />
                                                 </Popover>
                                             )
@@ -266,7 +288,7 @@ function SelfStudent() {
                         <div className="self-bar"></div>
                         <div className="self-room-list">
                             {
-                                myStore.member.map(({ id, activate, user: { name, tomato, vip } }) => {
+                                myStore.member.map(({ id, user: { name, tomato, vip } }) => {
                                     return <div className="self-member" key={id}>
                                         <div className="self-member-tomato">{tomato}</div>
                                         <div className="self-member-name">{name}</div>

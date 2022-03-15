@@ -18,7 +18,8 @@ import {
     deleteUser,
     deleteGroup,
     quitGroup,
-    createGroup
+    createGroup,
+    adoptUser
 } from "../services/index.js";
 
 class Mobx {
@@ -327,6 +328,21 @@ class Mobx {
 
         if (code) {
             message.success(msg);
+        } else {
+            message.error(errors);
+        }
+    }
+
+    adoptUserRequest = async(data) => {
+        const {
+            data: {
+                code, msg, errors
+            }
+        } = await adoptUser(data);
+
+        if (code) {
+            message.success(msg);
+            myStore.adminSelfRoomRequest();
         } else {
             message.error(errors);
         }

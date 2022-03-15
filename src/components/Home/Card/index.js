@@ -147,7 +147,7 @@ function Card() {
                                 trailColor="rgb(241, 233, 170)"
                                 width={200}
                             />
-                            <div className="ca-process-word">{`${percent} %`}</div>
+                            <div className="ca-process-word">耐心成长</div>
                         </div>
                         <PauseCircleOutlined
                             className="ca-pause"
@@ -206,7 +206,7 @@ function Card() {
                                         return <div className="ca-item" key={index}>
                                             <div className="ca-top">
                                                 <div className="ca-tip">{tip}</div>
-                                                <div className="ca-start-time">{now}</div>
+                                                <div className="ca-start-time">{now.slice(0, 19).replace("T", " ")}</div>
                                             </div>
                                             <div className="ca-comment">{comment}</div>
                                             <div className="ca-bto">

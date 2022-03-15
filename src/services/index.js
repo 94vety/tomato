@@ -34,4 +34,7 @@ export const quitGroup = data => request.delete("/user/group/", data);
 
 export const createGroup = data => request.post("/groups/", data);
 
+export const adoptUser = data => request.put("/allow/", data);
+
+
 

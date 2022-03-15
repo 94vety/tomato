@@ -4,20 +4,21 @@
     align-items: center;
     height: 100vh;
     width: 100vw;
-    background-color: rgb(229, 227, 196);
+    background-color: #eee;
     background-size: 100vw 100vh;
 }
 
 .content {
     width: 600px;
-    border-radius: 10px;
+    border-radius: 40px;
+    box-shadow: 2px 2px 5px #ccc;
     padding: 100px;
     background-color: white;
 }
 
 .header {
-    color: rgb(142, 183, 60);
-    font-size: 30px;
+    color: #409EFF;
+    font-size: 40px;
     text-align: center;
     margin-bottom: 40px;
     display: flex;
@@ -30,14 +31,19 @@
 
 .footer {
     margin-top: 40px;
-    color: rgb(142, 183, 60);
+    color: #409EFF;
+    display: flex;
+    justify-content: right;
+}
+
+.super-man {
     display: flex;
     justify-content: right;
 }
 
 .register {
     text-align: right;
-    color: rgb(142, 183, 60);
+    color: #409EFF;
     width: 32px;
     font-size: 16px;
     border-bottom: 5px;

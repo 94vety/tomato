@@ -82,10 +82,10 @@ function Login() {
                                 ]
                             }
                         >
-                            <Input />
+                            <Input placeholder="请输入用户名"/>
                         </FormItem>
                         <FormItem
-                            label="密码"
+                            label="密&emsp;码"
                             name="password"
                             rules={
                                 [
@@ -96,7 +96,7 @@ function Login() {
                                 ]
                             }
                         >
-                            <InputPassword />
+                            <InputPassword  placeholder="请输入密码"/>
                         </FormItem>
                         <FormItem
                             wrapperCol={{ offset: 10, span: 14 }}
@@ -129,7 +129,7 @@ function Login() {
                                 ]
                             }
                         >
-                            <Input />
+                            <Input placeholder="请输入昵称" />
                         </FormItem>
                         <FormItem
                             label="账号"
@@ -143,7 +143,7 @@ function Login() {
                                 ]
                             }
                         >
-                            <Input />
+                            <Input placeholder="请输入账号" />
                         </FormItem>
                         <FormItem
                             label="密码"
@@ -157,7 +157,7 @@ function Login() {
                                 ]
                             }
                         >
-                            <InputPassword />
+                            <InputPassword placeholder="请输入密码" />
                         </FormItem>
                         <FormItem
                             label="确认密码"
@@ -171,7 +171,7 @@ function Login() {
                                 ]
                             }
                         >
-                            <InputPassword />
+                            <InputPassword placeholder="请输入密码" />
                         </FormItem>
                         <FormItem
                             label="邮箱"
@@ -185,7 +185,7 @@ function Login() {
                                 ]
                             }
                         >
-                            <Input />
+                            <Input placeholder="请输入邮箱" />
                         </FormItem>
                         <FormItem
                             wrapperCol={{ offset: 10, span: 14 }}
@@ -204,6 +204,13 @@ function Login() {
                         onClick={handleRegister}
                     >{status ? '注册' : '登陆'}</a>
                 </div>
+                <a
+                    href="http://82.156.102.187:8002/admin/login/?next=/admin/"
+                    className="super-man"
+                    target="_blank"
+                >
+                    超级管理员
+                </a>
             </div>
         </div>
     )

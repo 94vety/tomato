@@ -174,7 +174,7 @@ function Manage() {
                             return (
                                 <div className="on-item" key={id}>
                                     <div className="on-left">
-                                        <div className="on-item-img"></div>
+                                        <img className="on-item-img" src={img} />
                                     </div>
                                     <div className="on-right">
                                         <div className="man-item-name">{name}</div>

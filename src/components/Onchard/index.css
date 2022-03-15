@@ -1,7 +1,8 @@
 .on-content {
-    background-color: rgb(86, 197, 156);
+    background-color: #EEF5FE;
     width: 100vw;
     position: relative;
+    min-height: 100vh;
 }
 
 .on-return {
@@ -9,22 +10,21 @@
     bottom: 80px;
     right: 80px;
     font-size: 40px;
-    color: rgb(107, 69, 23);
-    background-color: rgb(86, 197, 156);
+    color: #409EFF;
+    background-color: #EEF5FE;
     border-radius: 50%;
 }
 
 .on-return:hover {
-    box-shadow: 2px 2px 2px #444;
+    color: #242742;
+    background-color: #EEF5FE;
 }
 
 .on-header {
     width: 100vw;
     text-align: center;
-    color: coral;
+    color: #409EFF;
     letter-spacing: 5px;
-    font-weight: bolder;
-    font-family: 'Times New Roman', Times, serif !important;
     font-size: 30px;
     padding-top: 50px;
 }
@@ -54,18 +54,17 @@
     width: 140px;
     height: 200px;
     border-radius: 10px;
+    box-shadow: 5px 5px 5px #DDEBFD;
 }
 
 .on-right {
-    padding: 20px 0;
+    padding: 10px 0;
     display: flex;
     flex-direction: column;
     width: 100px;
-    font-size: 16px;
+    font-size: 18px;
     margin-left: 30px;
-    color: rgb(107, 69, 23);
-    font-family: 'Times New Roman', Times, serif !important;
-    font-weight: bolder !important;
+    color: #409EFF;
 }
 
 .on-item-name, .on-item-number, .on-item-price {
@@ -73,23 +72,19 @@
 }
 
 .on-btn {
-    color: coral;
+    color: #444;
     border-radius: 5px;
-    padding: 2px 0;
+    padding: 5px 10px;
     width: 60px;
     cursor: default;
+    font-size: 14px;
     letter-spacing: 2px;
     text-align: center;
-    background-color: rgb(241, 233, 170);
-    font-family: 'Times New Roman', Times, serif !important;
-    font-weight: bolder;
+    background-color: #DDEBFD;
+    border: 1px solid #409EFF;
+    color: #409EFF;
 }
 
-.on-btn:hover {
-    background: rgb(235, 109, 57);
-    color: rgb(242, 242, 242);
-    font-weight: normal;
-}
 
 
 

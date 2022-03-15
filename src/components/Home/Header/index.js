@@ -1,6 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import { observer } from "mobx-react-lite";
 import myStore from "../../../store";
+import imgUrl from "../../../images/tomato.png";
 import "./index.css";
 
 function Header() {
@@ -20,7 +21,10 @@ function Header() {
 
     return (
         <div className="he-con">
-            <div className="he-icon">番茄</div>
+            <div className="he-icon">
+                <img className="he-icon-img" src={imgUrl} />
+                番茄学习法
+            </div>
             <div className="he-right">
                 {myStore.admin && <div
                     className="he-manage"
