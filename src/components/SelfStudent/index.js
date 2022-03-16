@@ -10,7 +10,8 @@ import "./index.css";
 import {
     LeftCircleOutlined, EditOutlined,
     DeleteOutlined, UsergroupDeleteOutlined,
-    LogoutOutlined, PlusCircleOutlined
+    LogoutOutlined,
+    CloseCircleOutlined, CheckCircleOutlined
 } from '@ant-design/icons';
 import imgUrl from "../../images/tomato.png";
 
@@ -25,20 +26,19 @@ function SelfStudent() {
     const [max, setMax] = useState(0);
 
     useEffect(() => {
-        if (myStore.vip) {
-            myStore.adminSelfRoomRequest();
-        } else {
-            myStore.placeSelfRoomRequest();
-        }
+        myStore.placeSelfRoomRequest();
+        myStore.applyStatusRequest();
     }, [])
 
-    const handleEnter = (event) => {
+    const handleEnter = async (event) => {
         const { value } = event.target;
 
         if (event.keyCode === 13) {
-            myStore.joinRoomRequest({
+            await myStore.joinRoomRequest({
                 group: value
-            })
+            });
+
+            myStore.applyStatusRequest();
         } else {
             setValue(value);
         }
@@ -97,16 +97,14 @@ function SelfStudent() {
         })
     }
 
-    const handleQuitGroup = (id) => {
+    const handleQuitGroup = () => {
         confirm({
             title: "番茄自习室",
             content: "是否确认退出自习室",
             okText: "确认",
             cancelText: "取消",
             onOk() {
-                myStore.quitGroupRequest({
-                    goods: id
-                });
+                myStore.quitGroupRequest();
             }
         })
     }
@@ -132,6 +130,18 @@ function SelfStudent() {
                 myStore.quitGroupRequest({
                     info: id
                 });
+            }
+        })
+    }
+
+    const handleCancelApply = () => {
+        confirm({
+            title: "番茄自习室",
+            content: "是否取消该申请",
+            okText: "确认",
+            cancelText: "取消",
+            onOk() {
+                myStore.quitGroupRequest();
             }
         })
     }
@@ -181,126 +191,164 @@ function SelfStudent() {
                     </div>
                 </div>
             </div>
-            {myStore.vip
-                ? myStore.listEmpty
-                    ? (<div className="self-room">
-                        <div className="self-vip-title">创建房间</div>
-                        <div className="self-bar"></div>
-                        <div className="self-vip-list">
-                            <div className="self-vip-item">
-                                <div className="self-vip-label">自习室名称</div>
-                                <input onChange={({ target: { value } }) => { setGroupName(value) }} className="self-vip-empty" />
-                            </div>
-                            <div className="self-vip-item">
-                                <div className="self-vip-label">最大人数</div>
-                                <input onChange={({ target: { value } }) => { setMax(value) }} className="self-vip-empty" />
-                            </div>
-                            <div
-                                className="self-vip-btn"
-                                onClick={handleCreateRoom}
-                            >创建</div>
-                        </div>
-                    </div>)
-                    : (<div className="self-room">
-                        <div className="self-room-header">
-                            <Popover content="删除自习室">
-                                <UsergroupDeleteOutlined
-                                    className="delete-group"
-                                    onClick={() => handleDeleteGroup(myStore.room.id)}
-                                />
-                            </Popover>
-                            <Popover content="编辑自习室">
-                                <EditOutlined
-                                    className="self-name-edit"
-                                    onClick={() => setIsVisible(true)}
-                                />
-                            </Popover>
-                            <div className="self-room-name">
-                                房间名: {myStore.room.name}
-                            </div>
-                            <div className="self-room-max">最大人数: {myStore.room.max}</div>
-                        </div>
-                        <div className="self-bar"></div>
-                        <div className="self-room-list">
-                            {
-                                myStore.member.map(({ id, activate, user: { name, tomato, vip } }) => {
-                                    return <div className="self-member" key={id}>
-                                        <div className="self-member-tomato">
-                                            <img className="self-member-img" src={imgUrl} />
-                                            {tomato}
-                                        </div>
-                                        <div className="self-member-name">{name}</div>
-                                        <div className="self-member-vip">{vip ? "会员" : "非会员"}</div>
-                                        {!activate
+            {!myStore.apply
+                ? (
+                    myStore.vip
+                        ? myStore.listEmpty
+                            ? (<div className="self-room">
+                                <div className="self-vip-title">创建房间</div>
+                                <div className="self-bar"></div>
+                                <div className="self-vip-list">
+                                    <div className="self-vip-item">
+                                        <div className="self-vip-label">自习室名称</div>
+                                        <input onChange={({ target: { value } }) => { setGroupName(value) }} className="self-vip-empty" />
+                                    </div>
+                                    <div className="self-vip-item">
+                                        <div className="self-vip-label">最大人数</div>
+                                        <input onChange={({ target: { value } }) => { setMax(value) }} className="self-vip-empty" />
+                                    </div>
+                                    <div
+                                        className="self-vip-btn"
+                                        onClick={handleCreateRoom}
+                                    >创建</div>
+                                </div>
+                            </div>)
+                            : (<div className="self-room">
+                                <div className="self-room-header">
+                                    <Popover content="删除自习室">
+                                        <UsergroupDeleteOutlined
+                                            className="delete-group"
+                                            onClick={() => handleDeleteGroup(myStore.room.id)}
+                                        />
+                                    </Popover>
+                                    <Popover content="编辑自习室">
+                                        <EditOutlined
+                                            className="self-name-edit"
+                                            onClick={() => setIsVisible(true)}
+                                        />
+                                    </Popover>
+                                    <div className="self-room-name">
+                                        房间名: {myStore.room.name}
+                                    </div>
+                                    <div className="self-room-max">最大人数: {myStore.room.max}</div>
+                                </div>
+                                <div className="self-bar"></div>
+                                <div className="self-room-list">
+                                    {
+                                        myStore.userId === myStore.room.user.id
                                             ? (
-                                                <div className="self-badge">
-                                                    <Badge color="cyan" />
-                                                    <div className="self-badge-word">自习中</div>
-                                                </div>
+                                                myStore.member.map(({ id, activate, user: { name, tomato, vip } }) => {
+                                                    return <div className="self-member" key={id}>
+                                                        <div className="self-member-tomato">
+                                                            <img className="self-member-img" src={imgUrl} />
+                                                            {tomato}
+                                                        </div>
+                                                        <div className="self-member-name">{name}</div>
+                                                        <div className="self-member-vip">{vip ? "会员" : "非会员"}{activate}</div>
+                                                        {activate
+                                                            ? (
+                                                                <div className="self-badge">
+                                                                    <Badge color="cyan" />
+                                                                    <div className="self-badge-word">自习中</div>
+                                                                </div>
+                                                            )
+                                                            : (
+                                                                <div className="self-badge">
+                                                                    <Badge color="volcano" />
+                                                                    <div className="self-badge-word">申请</div>
+                                                                </div>
+                                                            )
+                                                        }
+                                                        {activate
+                                                            ? (
+                                                                <Popover content="通过申请">
+                                                                    <CheckCircleOutlined
+                                                                        className="apply-user"
+                                                                        onClick={() => handleApplyUser(id)}
+                                                                    />
+                                                                </Popover>
+                                                            )
+                                                            : (
+                                                                <div className="apply-user"></div>
+                                                            )
+                
+                                                        }
+                                                        <Popover content="踢出自习室">
+                                                            <DeleteOutlined
+                                                                className="delete-user"
+                                                                onClick={() => handleDeleteUser(id)}
+                                                            />
+                                                        </Popover>
+                                                    </div>
+                                                })
                                             )
                                             : (
-                                                <div className="self-badge">
-                                                    <Badge color="volcano" />
-                                                    <div className="self-badge-word">申请</div>
-                                                </div>
+                                                myStore.member.filter(({ activate }) => activate).map(({ id, user: { name, tomato, vip } }) => {
+                                                    return <div className="self-member" key={id}>
+                                                        <div className="self-member-tomato">
+                                                            <img className="self-member-img" src={imgUrl} />
+                                                            {tomato}
+                                                        </div>
+                                                        <div className="self-member-name">{name}</div>
+                                                        <div className="self-member-vip">{vip ? "会员" : "非会员"}</div>
+                                                    </div>
+                                                })
                                             )
-                                        }
-                                        {!activate
-                                            ? (
-                                                <Popover content="申请加入自习室">
-                                                    <PlusCircleOutlined
-                                                        className="apply-user"
-                                                        onClick={() => handleApplyUser(id)}
-                                                    />
-                                                </Popover>
-                                            )
-                                            : (
-                                                <div className="apply-user"></div>
-                                            )
-
-                                        }
-                                        <Popover content="踢出自习室">
-                                            <DeleteOutlined
-                                                className="delete-user"
-                                                onClick={() => handleDeleteUser(id)}
-                                            />
-                                        </Popover>
+                                    }
+                                </div>
+                            </div>)
+                        : myStore.listEmpty
+                            ? (<div className="self-member-room">快加入自习室，学习吧！</div>)
+                            : (<div className="self-room">
+                                <div className="self-room-header">
+                                    <Popover content="退出自习室">
+                                        <LogoutOutlined
+                                            className="self-quit"
+                                            onClick={() => handleQuitGroup()}
+                                        />
+                                    </Popover>
+                                    <div className="self-room-name">
+                                        房间名: {myStore.room.name}
                                     </div>
-                                })
-                            }
-                        </div>
-                    </div>)
-                : myStore.listEmpty
-                    ? (<div className="self-member-room">快加入自习室，学习吧！</div>)
-                    : (<div className="self-room">
-                        <div className="self-room-header">
-                            <Popover content="退出自习室">
-                                <LogoutOutlined
-                                    className="self-quit"
-                                    onClick={() => handleQuitGroup(myStore.room.id)}
+                                    <div className="self-room-max">最大人数: {myStore.room.max}</div>
+                                </div>
+                                <div className="self-bar"></div>
+                                <div className="self-room-list">
+                                    {
+                                        myStore.member.filter(({ activate }) => activate).map(({ id, user: { name, tomato, vip } }) => {
+                                            return <div className="self-member" key={id}>
+                                                <div className="self-member-tomato">
+                                                    <img className="self-member-img" src={imgUrl} />
+                                                    {tomato}
+                                                </div>
+                                                <div className="self-member-name">{name}</div>
+                                                <div className="self-member-vip">{vip ? "会员" : "非会员"}</div>
+                                            </div>
+                                        })
+                                    }
+                                </div>
+                            </div>)
+                    
+                )
+                : (
+                    <div className="self-room">
+                        <div className="self-apply">
+                            <div className="self-apply-name">{myStore.applyData.group_name}</div>
+                            <div className="self-apply-adminname">管理员: {myStore.applyData.admin_name}</div>
+                            <div className="self-apply-status">{myStore.applyData.activate ? "通过" : "申请中"}</div>
+                            <Popover content="取消申请">
+                                <CloseCircleOutlined
+                                    className="apply-cancel"
+                                    onClick={handleCancelApply}
                                 />
                             </Popover>
-                            <div className="self-room-name">
-                                房间名: {myStore.room.name}
-                            </div>
-                            <div className="self-room-max">最大人数: {myStore.room.max}</div>
                         </div>
-                        <div className="self-bar"></div>
-                        <div className="self-room-list">
-                            {
-                                myStore.member.map(({ id, user: { name, tomato, vip } }) => {
-                                    return <div className="self-member" key={id}>
-                                        <div className="self-member-tomato">{tomato}</div>
-                                        <div className="self-member-name">{name}</div>
-                                        <div className="self-member-vip">{vip ? "会员" : "非会员"}</div>
-                                    </div>
-                                })
-                            }
-                        </div>
-                    </div>)
+                    </div>
+                )
             }
         </div>
     )
 }
 
 export default observer(SelfStudent);
+

@@ -8,7 +8,6 @@ import {
     addReport,
     getGoodList,
     buyGood,
-    adminSelfRoom,
     placeSelfRoom,
     joinRoom,
     addCom,
@@ -19,7 +18,8 @@ import {
     deleteGroup,
     quitGroup,
     createGroup,
-    adoptUser
+    adoptUser,
+    applyStatus
 } from "../services/index.js";
 
 class Mobx {
@@ -31,6 +31,9 @@ class Mobx {
     listEmpty = true
     vip = false
     admin = false
+    userId = 0
+    applyData = {}
+    apply = false
 
     constructor() {
         makeAutoObservable(this);
@@ -41,7 +44,7 @@ class Mobx {
             data: {
                 code, errors,
                 data: {
-                    token, tomato,
+                    token, tomato, id,
                     vip, admin, email
                 }
             }
@@ -51,6 +54,7 @@ class Mobx {
             this.tomato = tomato;
             this.vip = vip;
             this.admin = admin;
+            this.userId = id;
 
             localStorage.setItem("token", token);
             localStorage.setItem("username", data.username);
@@ -68,7 +72,7 @@ class Mobx {
             data: {
                 code, errors,
                 data: {
-                    token, tomato,
+                    token, tomato, id,
                     vip, admin, email
                 }
             }
@@ -78,6 +82,7 @@ class Mobx {
             this.tomato = tomato;
             this.vip = vip;
             this.admin = admin;
+            this.userId = id;
             
             localStorage.setItem("token", token);
             localStorage.setItem("username", data.username);
@@ -160,27 +165,6 @@ class Mobx {
         }
     }
 
-    adminSelfRoomRequest = async() => {
-        const {
-            data: {
-                code, data, errors
-            }
-        } = await adminSelfRoom();
-
-        if (code) {
-            if (data.length === 0) {
-                this.listEmpty = true;
-            } else {
-                const { member } = data[0];
-                this.listEmpty = false;
-                this.room = data[0];
-                this.member = member;
-            }
-        } else {
-            message.error(errors);
-        }
-    }
-
     placeSelfRoomRequest = async() => {
         const {
             data: {
@@ -192,9 +176,12 @@ class Mobx {
             if (data.length === 0) {
                 this.listEmpty = true;
             } else {
+                console.log(data[0])
                 const { member } = data[0];
-                this.listEmpty = false;
                 this.room = data[0];
+                console.log(this.room)
+                this.listEmpty = false;
+                
                 this.member = member;
             }
         } else {
@@ -205,12 +192,16 @@ class Mobx {
     joinRoomRequest = async(data) => {
         const {
             data: {
-                code, errors
+                code, errors,
+                data: {
+                    info
+                }
             }
         } = await joinRoom(data);
         
         if (code) {
-            message.success("成功加入自习室");
+            message.success(info);
+            this.placeSelfRoomRequest();
         } else {
             message.error(errors);
         }
@@ -270,7 +261,7 @@ class Mobx {
 
         if (code) {
             message.success(msg);
-            myStore.adminSelfRoomRequest();
+            myStore.placeSelfRoomRequest();
         } else {
             message.error(errors);
         }
@@ -285,7 +276,7 @@ class Mobx {
 
         if (code) {
             message.success(msg);
-            myStore.adminSelfRoomRequest();
+            myStore.placeSelfRoomRequest();
         } else {
             message.error(errors);
         }
@@ -300,20 +291,24 @@ class Mobx {
 
         if (code) {
             message.success(msg);
+            this.placeSelfRoomRequest();
         } else {
             message.error(errors);
         }
     }
 
-    quitGroupRequest = async(data) => {
+    quitGroupRequest = async() => {
         const {
             data: {
                 code, errors, msg
             }
-        } = await quitGroup(data);
+        } = await quitGroup();
 
         if (code) {
             message.success(msg);
+            this.placeSelfRoomRequest();
+            this.applyStatusRequest();
+            this.apply = false;
         } else {
             message.error(errors);
         }
@@ -328,6 +323,7 @@ class Mobx {
 
         if (code) {
             message.success(msg);
+            this.placeSelfRoomRequest();
         } else {
             message.error(errors);
         }
@@ -342,7 +338,33 @@ class Mobx {
 
         if (code) {
             message.success(msg);
-            myStore.adminSelfRoomRequest();
+            myStore.placeSelfRoomRequest();
+        } else {
+            message.error(errors);
+        }
+    }
+
+    applyStatusRequest = async() => {
+        const {
+            data: {
+                code, errors,
+                data
+            }
+        } = await applyStatus();
+
+        if (code) {
+            if (data.length === 0) {
+                this.apply = false;
+            } else {
+                const { activate } = data;
+
+                if (activate) {
+                    this.apply = false;
+                } else {
+                    this.apply = true;
+                    this.applyData = data;
+                }
+            }
         } else {
             message.error(errors);
         }

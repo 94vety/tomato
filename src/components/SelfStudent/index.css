@@ -125,7 +125,7 @@
     background-color: #EEF5FE;
     border: 2px solid #409EFF;
     border-radius: 20px;
-    padding: 5px 0;
+    padding: 5px 50px;
     justify-content: space-around;
     align-items: center;
 }
@@ -159,6 +159,11 @@
     margin-left: 80px;
     color: #409EFF;
     margin-top: 3px;
+}
+
+.pass-user {
+    margin-top: 3px;
+    font-size: 18px;
 }
 
 .self-modify {
@@ -238,5 +243,22 @@
     padding: 20px 50px;
     color: #409EFF;
     font-size: 20px;
+}
+
+.self-apply {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    background-color: #EEF5FE;
+    padding: 2px 20px;
+    border-radius: 20px;
+    border: 1px solid #409EFF;
+    align-items: center;
+}
+
+.apply-cancel {
+    width: 30px;
+    height: 30px;
+    padding-top: 5px;
 }
 
