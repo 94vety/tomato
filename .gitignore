@@ -1,7 +1,2 @@
-
-
 # F忽略的文件夹
-node_modules/  
-jscoverage_lib/  
-bower_components/  
-dist/  
+/node_modules

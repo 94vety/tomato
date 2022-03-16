@@ -237,7 +237,7 @@ function SelfStudent() {
                                     {
                                         myStore.userId === myStore.room.user.id
                                             ? (
-                                                myStore.member.map(({ id, activate, user: { name, tomato, vip } }) => {
+                                                myStore.member.map(({ id, activate, user: { name, tomato, vip, id: userId } }) => {
                                                     return <div className="self-member" key={id}>
                                                         <div className="self-member-tomato">
                                                             <img className="self-member-img" src={imgUrl} />
@@ -259,8 +259,8 @@ function SelfStudent() {
                                                                 </div>
                                                             )
                                                         }
-                                                        {activate
-                                                            ? (
+                                                        {myStore.userId !== userId && activate
+                                                            && (
                                                                 <Popover content="通过申请">
                                                                     <CheckCircleOutlined
                                                                         className="apply-user"
@@ -268,17 +268,18 @@ function SelfStudent() {
                                                                     />
                                                                 </Popover>
                                                             )
-                                                            : (
-                                                                <div className="apply-user"></div>
-                                                            )
                 
                                                         }
-                                                        <Popover content="踢出自习室">
-                                                            <DeleteOutlined
-                                                                className="delete-user"
-                                                                onClick={() => handleDeleteUser(id)}
-                                                            />
-                                                        </Popover>
+                                                        {myStore.userId !== userId
+                                                            && (
+                                                                <Popover content="踢出自习室">
+                                                                    <DeleteOutlined
+                                                                        className="delete-user"
+                                                                        onClick={() => handleDeleteUser(id)}
+                                                                    />
+                                                                </Popover>
+                                                            )
+                                                        }
                                                     </div>
                                                 })
                                             )
