@@ -16,7 +16,6 @@ import {
 import imgUrl from "../../images/tomato.png";
 
 const { confirm } = Modal;
-const vip = localStorage.getItem("vip");
 
 function SelfStudent() {
     const navigate = useNavigate();
@@ -25,6 +24,7 @@ function SelfStudent() {
     const [roomName, setRoomName] = useState("");
     const [groupName, setGroupName] = useState("");
     const [max, setMax] = useState(0);
+    const vip = (localStorage.getItem("vip") === "true");
 
     useEffect(() => {
         myStore.placeSelfRoomRequest();
@@ -35,11 +35,15 @@ function SelfStudent() {
         const { value } = event.target;
 
         if (event.keyCode === 13) {
-            await myStore.joinRoomRequest({
-                group: value
-            });
-
-            myStore.applyStatusRequest();
+            if (myStore.apply || !myStore.listEmpty) {
+                message.warn("不能同时加入或者申请两个自习室");
+            } else {
+                await myStore.joinRoomRequest({
+                    group: value
+                });
+    
+                myStore.applyStatusRequest();
+            }
         } else {
             setValue(value);
         }
@@ -194,7 +198,7 @@ function SelfStudent() {
             </div>
             {!myStore.apply
                 ? (
-                    !!vip
+                    vip
                         ? myStore.listEmpty
                             ? (<div className="self-room">
                                 <div className="self-vip-title">创建房间</div>
@@ -229,7 +233,10 @@ function SelfStudent() {
                                         />
                                     </Popover>
                                     <div className="self-room-name">
-                                        房间名: {myStore.room.name}
+                                        房间名: {myStore.room.name} 
+                                    </div>
+                                    <div className="self-room-id">
+                                        房间号: {myStore.room.id}
                                     </div>
                                     <div className="self-room-max">最大人数: {myStore.room.max}</div>
                                 </div>
@@ -261,7 +268,7 @@ function SelfStudent() {
                                                             )
                                                         }
                                                         {myStore.userId !== userId && activate
-                                                            && (
+                                                            ? (
                                                                 <Popover content="通过申请">
                                                                     <CheckCircleOutlined
                                                                         className="apply-user"
@@ -269,10 +276,11 @@ function SelfStudent() {
                                                                     />
                                                                 </Popover>
                                                             )
+                                                            : <div className="apply-fill"></div>
                 
                                                         }
                                                         {myStore.userId !== userId
-                                                            && (
+                                                            ? (
                                                                 <Popover content="踢出自习室">
                                                                     <DeleteOutlined
                                                                         className="delete-user"
@@ -280,6 +288,7 @@ function SelfStudent() {
                                                                     />
                                                                 </Popover>
                                                             )
+                                                            : <div className="delete-fill"></div>
                                                         }
                                                     </div>
                                                 })
@@ -311,6 +320,9 @@ function SelfStudent() {
                                     </Popover>
                                     <div className="self-room-name">
                                         房间名: {myStore.room.name}
+                                    </div>
+                                    <div className="self-room-id">
+                                        房间号: {myStore.room.id}
                                     </div>
                                     <div className="self-room-max">最大人数: {myStore.room.max}</div>
                                 </div>

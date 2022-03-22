@@ -109,6 +109,12 @@
     margin-right: 50px;
 }
 
+.self-member-vip {
+    width: 50px;
+    margin-left: 50px;
+    margin-right: 50px;
+}
+
 .self-name-edit {
     color: #409EFF;
     font-size: 20px;
@@ -128,6 +134,16 @@
     padding: 5px 50px;
     justify-content: space-around;
     align-items: center;
+    margin: 10px 0;
+}
+
+.self-member-tomato {
+    width: 150px;
+    text-align: left;
+}
+
+.self-member-name {
+    width: 100px;
 }
 
 .self-member-img {
@@ -144,14 +160,24 @@
 .self-badge {
     display: flex;
     flex-direction: row;
+    width: 70px;
+}
+
+.delete-fill {
+    width: 100px;
 }
 
 .apply-user {
     font-size: 18px;
-    margin-left: 80px;
     color: #409EFF;
     margin-top: 3px;
     width: 20px;
+    margin-left: 80px;
+}
+
+.apply-fill {
+    width: 100px;
+    height: 20px;
 }
 
 .delete-user {
@@ -159,6 +185,7 @@
     margin-left: 80px;
     color: #409EFF;
     margin-top: 3px;
+    width: 20px;
 }
 
 .pass-user {
@@ -177,6 +204,7 @@
     width: 150px;
     letter-spacing: 2px;
     line-height: 30px;
+    width: 200px;
 }
 
 .self-vip-title {

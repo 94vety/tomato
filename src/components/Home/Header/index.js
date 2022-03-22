@@ -5,11 +5,10 @@ import imgUrl from "../../../images/tomato.png";
 import { PoweroffOutlined, ProfileOutlined } from "@ant-design/icons";
 import "./index.css";
 
-const admin = localStorage.getItem("admin");
-const vip = localStorage.getItem("vip");
-
 function Header() {
     const navigate = useNavigate();
+    const admin = (localStorage.getItem("admin") === "true");
+    const vip = (localStorage.getItem("vip") === "true");
 
     const handleOnchard = () => {
         navigate("/onchard");
@@ -39,7 +38,8 @@ function Header() {
                 番茄学习法
             </div>
             <div className="he-right">
-                {!!admin && <div
+                {admin}
+                {admin && <div
                     className="he-manage"
                     onClick={handleManage}
                 >管理中心</div>
