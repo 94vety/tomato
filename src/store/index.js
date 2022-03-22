@@ -358,7 +358,7 @@ class Mobx {
         if (code) {
             const { activate, group_name } = data;
 
-            if (activate && !group_name) {
+            if (activate || !group_name) {
                 this.apply = false;
             } else {
                 this.apply = true;

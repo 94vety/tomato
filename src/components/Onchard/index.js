@@ -17,21 +17,26 @@ function Onchard() {
         myStore.getGoodListRequest()
     }, [])
 
-    const handleBuy = (id, price) => {
-        confirm({
-            title: "番茄果园",
-            content: "是否确认购买",
-            okText: "确认",
-            cancelText: "取消",
-            onOk() {
-                if (!vip) {
-                    message.warn("你不是 VIP, 无法购买");
-                } 
-                myStore.buyGoodRequest({
-                    goods: id
-                }, price);
-            }
-        })
+    const handleBuy = (id, price, number) => {
+        if (number === 0) {
+            message.warn("所购买的商品已售空");
+        } else {
+            confirm({
+                title: "番茄果园",
+                content: "是否确认购买",
+                okText: "确认",
+                cancelText: "取消",
+                onOk() {
+                    if (!vip) {
+                        message.warn("你不是 VIP, 无法购买");
+                    } else {
+                        myStore.buyGoodRequest({
+                            goods: id
+                        }, price);
+                    }
+                }
+            })
+        }
     }
 
     const handleReturn = () => {
@@ -71,7 +76,7 @@ function Onchard() {
                                         <div className="on-item-price">花费: {price}</div>
                                         <div
                                             className="on-btn"
-                                            onClick={() => handleBuy(id, price)}
+                                            onClick={() => handleBuy(id, price, number)}
                                         >购买</div>
                                     </div>
                                 </div>
