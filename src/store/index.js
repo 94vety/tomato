@@ -19,7 +19,8 @@ import {
     quitGroup,
     createGroup,
     adoptUser,
-    applyStatus
+    applyStatus,
+    getRecords
 } from "../services/index.js";
 
 class Mobx {
@@ -34,6 +35,7 @@ class Mobx {
     userId = 0
     applyData = {}
     apply = false
+    records = []
 
     constructor() {
         makeAutoObservable(this);
@@ -52,10 +54,10 @@ class Mobx {
 
         if (code) {
             this.tomato = tomato;
-            this.vip = vip;
-            this.admin = admin;
             this.userId = id;
 
+            localStorage.setItem("vip", vip);
+            localStorage.setItem("admin", admin);
             localStorage.setItem("token", token);
             localStorage.setItem("username", data.username);
             localStorage.setItem("email", email);
@@ -80,10 +82,10 @@ class Mobx {
 
         if (code) {
             this.tomato = tomato;
-            this.vip = vip;
-            this.admin = admin;
             this.userId = id;
             
+            localStorage.setItem("vip", vip);
+            localStorage.setItem("admin", admin);
             localStorage.setItem("token", token);
             localStorage.setItem("username", data.username);
             localStorage.setItem("email", email);
@@ -141,7 +143,7 @@ class Mobx {
         }
     }
 
-    buyGoodRequest = async(data) => {
+    buyGoodRequest = async(data, price) => {
         const {
             data: {
                 code, errors
@@ -150,6 +152,9 @@ class Mobx {
         
         if (code) {
             message.success("购买成功");
+            
+            this.tomato = this.tomato - price;
+
             this.goodList = this.goodList.map(item => {
                 if (item.id === data.goods) {
                     return {
@@ -176,10 +181,8 @@ class Mobx {
             if (data.length === 0) {
                 this.listEmpty = true;
             } else {
-                console.log(data[0])
                 const { member } = data[0];
                 this.room = data[0];
-                console.log(this.room)
                 this.listEmpty = false;
                 
                 this.member = member;
@@ -353,18 +356,32 @@ class Mobx {
         } = await applyStatus();
 
         if (code) {
-            if (data.length === 0) {
+            const { activate, group_name } = data;
+
+            if (activate && !group_name) {
                 this.apply = false;
             } else {
-                const { activate } = data;
-
-                if (activate) {
-                    this.apply = false;
-                } else {
-                    this.apply = true;
-                    this.applyData = data;
-                }
+                this.apply = true;
+                this.applyData = data;
             }
+        } else {
+            message.error(errors);
+        }
+    }
+
+    getRecordsRequest = async() => {
+        const {
+            data: {
+                code, data, errors
+            }
+        } = await getRecords();
+
+        if (code) {
+            const {
+                user_record
+            } = data[0]
+
+            this.records = user_record;
         } else {
             message.error(errors);
         }

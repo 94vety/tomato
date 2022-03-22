@@ -1,11 +1,10 @@
 .he-con {
     background-color: #DDEBFD;
     height: 60px;
-    padding: 20px 200px;
+    padding: 20px 100px;
     color: #409EFF;
     display: flex;
     flex-direction: row;
-    justify-content: space-between;
     line-height: 20px;
     font-size: 20px;
     box-shadow: 10px 5px 5px #BBC9DB;
@@ -29,4 +28,17 @@
     width: 300px;
     justify-content: space-between;
     cursor: default;
+    margin-left: 500px;
+}
+
+.he-signout {
+    width: 20px;
+    height: 20px;
+    margin-left: 80px;
+}
+
+.he-records {
+    width: 20px;
+    height: 20px;
+    margin-left: 20px;
 }

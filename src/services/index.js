@@ -38,5 +38,5 @@ export const createGroup = data => request.post("/groups/", data);
 
 export const adoptUser = data => request.put("/allow/", data);
 
-
+export const getRecords = data => request.get("/records/");
 

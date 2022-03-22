@@ -16,6 +16,7 @@ import {
 import imgUrl from "../../images/tomato.png";
 
 const { confirm } = Modal;
+const vip = localStorage.getItem("vip");
 
 function SelfStudent() {
     const navigate = useNavigate();
@@ -193,7 +194,7 @@ function SelfStudent() {
             </div>
             {!myStore.apply
                 ? (
-                    myStore.vip
+                    !!vip
                         ? myStore.listEmpty
                             ? (<div className="self-room">
                                 <div className="self-vip-title">创建房间</div>

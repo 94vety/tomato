@@ -1,12 +1,14 @@
 import React, { useEffect } from "react";
-import { Empty, Modal } from "antd";
+import { Empty, message, Modal } from "antd";
 import { observer } from "mobx-react-lite";
 import { useNavigate } from "react-router-dom";
 import myStore from "../../store";
+import imgUrl from "../../images/tomato.png";
 import "./index.css";
 import { LeftCircleOutlined } from '@ant-design/icons';
 
 const { confirm } = Modal;
+const vip = localStorage.getItem("vip");
 
 function Onchard() {
     const navigate = useNavigate();
@@ -15,16 +17,19 @@ function Onchard() {
         myStore.getGoodListRequest()
     }, [])
 
-    const handleBuy = (id) => {
+    const handleBuy = (id, price) => {
         confirm({
             title: "番茄果园",
             content: "是否确认购买",
             okText: "确认",
             cancelText: "取消",
             onOk() {
+                if (!vip) {
+                    message.warn("你不是 VIP, 无法购买");
+                } 
                 myStore.buyGoodRequest({
                     goods: id
-                });
+                }, price);
             }
         })
     }
@@ -42,6 +47,10 @@ function Onchard() {
             <div className="on-header">
                 番茄果园
             </div>
+            <div className="on-tomato">
+                <img className="on-icon-img" src={imgUrl} />
+                {myStore.tomato}
+            </div>
             <div className="on-good">
                 {
                     myStore.goodList.length === 0
@@ -58,11 +67,11 @@ function Onchard() {
                                     </div>
                                     <div className="on-right">
                                         <div className="on-item-name">{name}</div>
-                                        <div className="on-item-number">存量: {number}</div>
+                                        <div className="on-item-number">{number === 0 ? "已售空" : `存量: ${number}`}</div>
                                         <div className="on-item-price">花费: {price}</div>
                                         <div
                                             className="on-btn"
-                                            onClick={() => handleBuy(id)}
+                                            onClick={() => handleBuy(id, price)}
                                         >购买</div>
                                     </div>
                                 </div>
