@@ -132,7 +132,7 @@ function SelfStudent() {
             okText: "确认",
             cancelText: "取消",
             onOk() {
-                myStore.quitGroupRequest({
+                myStore.adoptUserRequest({
                     info: id
                 });
             }
@@ -267,7 +267,7 @@ function SelfStudent() {
                                                                 </div>
                                                             )
                                                         }
-                                                        {myStore.userId !== userId && activate
+                                                        {myStore.userId !== userId && !activate
                                                             ? (
                                                                 <Popover content="通过申请">
                                                                     <CheckCircleOutlined
