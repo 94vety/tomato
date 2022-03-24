@@ -20,13 +20,15 @@ import {
     createGroup,
     adoptUser,
     applyStatus,
-    getRecords
+    getRecords,
+    modifyAccount
 } from "../services/index.js";
 
 class Mobx {
     constructor() {
         this.tomato = 0
-        this.tomatoList = []
+        this.tomatoMature = []
+        this.tomatoWither = []
         this.goodList = []
         this.room = {}
         this.member = []
@@ -105,9 +107,17 @@ class Mobx {
         } = await getTomatos();
 
         const { user_report } = data[0];
+        this.tomatoMature = [];
+        this.tomatoWither = [];
 
         if (code) {
-            this.tomatoList = user_report;
+            user_report.forEach(item => {
+                if (item.wither) {
+                    this.tomatoMature = [...this.tomatoMature, item];
+                } else {
+                    this.tomatoWither = [...this.tomatoWither, item];
+                }
+            })
         } else {
             message.error(errors);
         }
@@ -121,6 +131,7 @@ class Mobx {
         } = await addReport(data);
 
         if (code) {
+            this.getTomatosRequest();
             message.success("任务记录已上传");
         } else {
             message.error(errors);       
@@ -382,6 +393,26 @@ class Mobx {
             } = data[0]
 
             this.records = user_record;
+        } else {
+            message.error(errors);
+        }
+    }
+
+    modifyAccountRequest = async(data, id) => {
+        const {
+            data: {
+                code, errors, msg, data
+            }
+        } = await modifyAccount(data, id);
+
+        if (code) {
+            const {
+                email, name
+            } = data;
+
+            localStorage.setItem("username", name);
+            localStorage.setItem("email", email);
+            message.success(msg);
         } else {
             message.error(errors);
         }

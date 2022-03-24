@@ -37,8 +37,24 @@
     margin-left: 80px;
 }
 
-.he-records {
+.he-records, .he-account {
     width: 20px;
     height: 20px;
     margin-left: 20px;
 }
+
+.he-input {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.he-top-input {
+    margin-bottom: 20px;
+}
+
+.he-top-input, .he-bto-input {
+    width: 200px;
+}
+
+

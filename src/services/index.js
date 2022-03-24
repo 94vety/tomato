@@ -38,5 +38,6 @@ export const createGroup = data => request.post("/groups/", data);
 
 export const adoptUser = data => request.put("/allow/", data);
 
-export const getRecords = data => request.get("/records/");
+export const getRecords = () => request.get("/records/");
 
+export const modifyAccount = (data, id) => request.patch(`/self/${id}/`, data);

@@ -71,9 +71,11 @@ function Card() {
         });
 
         stop = false;
+        setComment("");
+        setLabel("");
+        setMinute("");
         setCommentVisible(false);
         setStatus(false);
-        myStore.getTomatosRequest();
     }
 
     const calcTime = () => {
@@ -189,33 +191,69 @@ function Card() {
                                 </div>
                             </div>
                         </Modal>
-                        <div className="ca-list">
-                            {
-                                myStore.tomatoList.length === 0
-                                    ? <Empty
-                                        className="empty"
-                                        description="没有数据"
-                                        image={Empty.PRESENTED_IMAGE_SIMPLE}
-                                    />
-                                    : myStore.tomatoList.map((item, index) => {
-                                        const {
-                                            tip, now, comment,
-                                            expected_time, actual_time
-                                        } = item;
+                        <div className="ca-content">
+                            <div className="ca-list">
+                                <div className="ca-content-header">成熟的番茄</div>
+                                <div className="ca-content-list">
+                                {
+                                    myStore.tomatoMature.length === 0
+                                        ? <Empty
+                                            className="empty"
+                                            description="没有数据"
+                                            image={Empty.PRESENTED_IMAGE_SIMPLE}
+                                        />
+                                        : myStore.tomatoMature.map((item, index) => {
+                                            const {
+                                                tip, now, comment,
+                                                expected_time, actual_time
+                                            } = item;
 
-                                        return <div className="ca-item" key={index}>
-                                            <div className="ca-top">
-                                                <div className="ca-tip">{tip}</div>
-                                                <div className="ca-start-time">{now.slice(0, 19).replace("T", " ")}</div>
+                                            return <div className="ca-item" key={index}>
+                                                <div className="ca-top">
+                                                    <div className="ca-tip">{tip}</div>
+                                                    <div className="ca-start-time">{now.slice(0, 19).replace("T", " ")}</div>
+                                                </div>
+                                                <div className="ca-comment">{comment}</div>
+                                                <div className="ca-bto">
+                                                    <div className="ca-left-time">预计：{expected_time} 分钟</div>
+                                                    <div className="ca-right-time">实际：{actual_time} 分钟</div>
+                                                </div>
                                             </div>
-                                            <div className="ca-comment">{comment}</div>
-                                            <div className="ca-bto">
-                                                <div className="ca-left-time">预计：{expected_time} 分钟</div>
-                                                <div className="ca-right-time">实际：{actual_time} 分钟</div>
+                                        })
+                                }
+                                </div>
+                            </div>
+                            <div className="ca-list">
+                                <div className="ca-content-header">枯萎的番茄</div>
+                                <div className="ca-content-list">
+                                {
+                                    myStore.tomatoWither.length === 0
+                                        ? <Empty
+                                            className="empty"
+                                            description="没有数据"
+                                            image={Empty.PRESENTED_IMAGE_SIMPLE}
+                                        />
+                                        : myStore.tomatoWither.map((item, index) => {
+                                            const {
+                                                tip, now, comment,
+                                                expected_time, actual_time
+                                            } = item;
+
+                                            return <div className="ca-item" key={index}>
+                                                <div className="ca-top">
+                                                    <div className="ca-tip">{tip}</div>
+                                                    <div className="ca-start-time">{now.slice(0, 19).replace("T", " ")}</div>
+                                                </div>
+                                                <div className="ca-comment">{comment}</div>
+                                                <div className="ca-bto">
+                                                    <div className="ca-left-time">预计：{expected_time} 分钟</div>
+                                                    <div className="ca-right-time">实际：{actual_time} 分钟</div>
+                                                </div>
                                             </div>
-                                        </div>
-                                    })
-                            }
+                                        })
+                                }
+                                </div>
+                            </div>
                         </div>
                     </div>)
                 }

@@ -3,7 +3,7 @@ import axios from 'axios'
 const baseURL = "http://82.156.102.187:8002";
 
 axios.interceptors.request.use(config => {
-    if (config.url === "/login/") {
+    if (config.url === "/login/" || config.url === "/register/") {
        localStorage.clear();
     } else {
         const token = `JWT ${localStorage.getItem("token")}`;
