@@ -1,4 +1,6 @@
-import { useEffect, useState } from "react";
+import {
+    useEffect, useState,
+} from "react";
 import { observer } from "mobx-react-lite";
 import { useNavigate } from "react-router-dom";
 import {
@@ -16,6 +18,7 @@ import {
 import imgUrl from "../../images/tomato.png";
 
 const { confirm } = Modal;
+const adminId = Number(localStorage.getItem("userId"));
 
 function SelfStudent() {
     const navigate = useNavigate();
@@ -79,7 +82,7 @@ function SelfStudent() {
     const handleDeleteUser = (id) => {
         confirm({
             title: "番茄自习室",
-            content: "是否提出该同学",
+            content: "是否踢出该同学",
             okText: "确认",
             cancelText: "取消",
             onOk() {
@@ -243,7 +246,7 @@ function SelfStudent() {
                                 <div className="self-bar"></div>
                                 <div className="self-room-list">
                                     {
-                                        myStore.userId === myStore.room.user.id
+                                        adminId === myStore.room.user.id
                                             ? (
                                                 myStore.member.map(({ id, activate, user: { name, tomato, vip, id: userId } }) => {
                                                     return <div className="self-member" key={id}>
@@ -252,7 +255,7 @@ function SelfStudent() {
                                                             {tomato}
                                                         </div>
                                                         <div className="self-member-name">{name}</div>
-                                                        <div className="self-member-vip">{vip ? "会员" : "非会员"}{activate}</div>
+                                                        <div className="self-member-vip">{vip ? "会员" : "非会员"}</div>
                                                         {activate
                                                             ? (
                                                                 <div className="self-badge">
@@ -267,7 +270,7 @@ function SelfStudent() {
                                                                 </div>
                                                             )
                                                         }
-                                                        {myStore.userId !== userId && !activate
+                                                        {adminId !== userId && !activate
                                                             ? (
                                                                 <Popover content="通过申请">
                                                                     <CheckCircleOutlined
@@ -279,7 +282,7 @@ function SelfStudent() {
                                                             : <div className="apply-fill"></div>
                 
                                                         }
-                                                        {myStore.userId !== userId
+                                                        {adminId !== userId
                                                             ? (
                                                                 <Popover content="踢出自习室">
                                                                     <DeleteOutlined

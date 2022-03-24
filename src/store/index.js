@@ -24,20 +24,19 @@ import {
 } from "../services/index.js";
 
 class Mobx {
-    tomato = 0
-    tomatoList = []
-    goodList = []
-    room = {}
-    member = []
-    listEmpty = true
-    vip = false
-    admin = false
-    userId = 0
-    applyData = {}
-    apply = false
-    records = []
-
     constructor() {
+        this.tomato = 0
+        this.tomatoList = []
+        this.goodList = []
+        this.room = {}
+        this.member = []
+        this.listEmpty = true
+        this.vip = false
+        this.admin = false
+        this.applyData = {}
+        this.apply = false
+        this.records = []
+
         makeAutoObservable(this);
     }
 
@@ -54,8 +53,8 @@ class Mobx {
 
         if (code) {
             this.tomato = tomato;
-            this.userId = id;
 
+            localStorage.setItem("userId", id);
             localStorage.setItem("vip", vip);
             localStorage.setItem("admin", admin);
             localStorage.setItem("token", token);
@@ -82,8 +81,8 @@ class Mobx {
 
         if (code) {
             this.tomato = tomato;
-            this.userId = id;
             
+            localStorage.setItem("userId", id);
             localStorage.setItem("vip", vip);
             localStorage.setItem("admin", admin);
             localStorage.setItem("token", token);
@@ -182,6 +181,7 @@ class Mobx {
                 this.listEmpty = true;
             } else {
                 const { member } = data[0];
+                console.log(member)
                 this.room = data[0];
                 this.listEmpty = false;
                 
